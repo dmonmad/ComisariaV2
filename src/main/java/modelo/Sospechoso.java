@@ -30,17 +30,17 @@ public class Sospechoso implements Serializable {
     private long id;
     @Column(name="NOMBRE")
     private String nombre;
-    @Column(name="NACIONALIDAD")
-    private String nacionalidad;
+@OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<String> nacionalidad;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Antecedentes> antecedentes;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Correo> correos;
-    @Column(name="NACIONALIDAD")
+    @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<NumeroTelefono> telefonos;
-    @Column(name="NACIONALIDAD")
+    @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Direccion> direcciones;
-    @Column(name="NACIONALIDAD")
+   @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Matricula> matriculas;
 
     public long getId() {
