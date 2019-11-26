@@ -5,6 +5,7 @@
  */
 package com.nightm4re.comisariav2.modelo;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +21,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="ANTECEDENTES")
-public class Antecedentes {
+public class Antecedentes implements Serializable {
     
     @Id
     @Column(name="ANTECEDENTES_ID")
@@ -33,6 +34,7 @@ public class Antecedentes {
     @JoinColumn(name="SOSP_ID")
     private Sospechoso sospechoso;
     
+    public Antecedentes(){}
     
     public Antecedentes(Long id, String titulo, Sospechoso sosp) {
         this.id = id;
@@ -59,7 +61,5 @@ public class Antecedentes {
     public void setSosp(Sospechoso sosp) {
         this.sospechoso = sosp;
     }
-    
-    
     
 }

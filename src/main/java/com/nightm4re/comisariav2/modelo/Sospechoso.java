@@ -30,7 +30,7 @@ public class Sospechoso implements Serializable {
     private long id;
     @Column(name="NOMBRE")
     private String nombre;
-@OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<String> nacionalidad;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Antecedentes> antecedentes;
@@ -40,7 +40,7 @@ public class Sospechoso implements Serializable {
     private List<NumeroTelefono> telefonos;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Direccion> direcciones;
-   @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Matricula> matriculas;
 
    public Sospechoso(){}
@@ -54,9 +54,7 @@ public class Sospechoso implements Serializable {
         this.telefonos = telefonos;
         this.direcciones = direcciones;
         this.matriculas = matriculas;
-    }
-   
-   
+    }   
    
     public long getId() {
         return id;
@@ -65,6 +63,5 @@ public class Sospechoso implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
-    
     
 }
