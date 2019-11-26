@@ -4,20 +4,32 @@
              http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 
-    <persistence-unit name="aplicacion"> <!-- ojo con el nombre-->
+    <persistence-unit name="comisaria"> <!-- ojo con el nombre-->
       
         <!-- Representación de las clases-->
         <class>
-            com.mycompany.mavenproject1.modelo.Empleado
+            com.nightm4re.comisariav2.modelo.Sospechoso
         </class>
         <class>
-            com.mycompany.mavenproject1.modelo.Direccion
+            com.nightm4re.comisariav2.modelo.Antecedentes
         </class>
         <class>
-            com.mycompany.mavenproject1.modelo.Autor
+            com.nightm4re.comisariav2.modelo.Correo
         </class>
         <class>
-            com.mycompany.mavenproject1.modelo.Libro
+            com.nightm4re.comisariav2.modelo.DatosExtra
+        </class>
+        <class>
+            com.nightm4re.comisariav2.modelo.Direccion
+        </class>
+        <class>
+            com.nightm4re.comisariav2.modelo.Foto
+        </class>
+        <class>
+            com.nightm4re.comisariav2.modelo.Matricula
+        </class>
+        <class>
+            com.nightm4re.comisariav2.modelo.NumeroTelefono
         </class>
     
     <properties>

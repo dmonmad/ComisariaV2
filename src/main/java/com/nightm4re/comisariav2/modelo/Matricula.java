@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modelo;
+package com.nightm4re.comisariav2.modelo;
 
 /**
  *
  * @author Nightm4re
  */
-public class Correo {
+public class Matricula {
     
 }

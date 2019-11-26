@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modelo;
+package com.nightm4re.comisariav2.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="Sospechosos")
+@Table(name="SOSPECHOSOS")
 public class Sospechoso implements Serializable {
     
     @Id
@@ -43,6 +43,21 @@ public class Sospechoso implements Serializable {
    @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Matricula> matriculas;
 
+   public Sospechoso(){}
+
+    public Sospechoso(long id, String nombre, List<String> nacionalidad, List<Antecedentes> antecedentes, List<Correo> correos, List<NumeroTelefono> telefonos, List<Direccion> direcciones, List<Matricula> matriculas) {
+        this.id = id;
+        this.nombre = nombre;
+        this.nacionalidad = nacionalidad;
+        this.antecedentes = antecedentes;
+        this.correos = correos;
+        this.telefonos = telefonos;
+        this.direcciones = direcciones;
+        this.matriculas = matriculas;
+    }
+   
+   
+   
     public long getId() {
         return id;
     }
