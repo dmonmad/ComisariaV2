@@ -54,8 +54,8 @@ public class Antecedentes implements Serializable {
         return sospechoso;
     }
 
-    public void setTitulo(String titulo) {
-        this.delito = titulo;
+    public void setDelito(String delito) {
+        this.delito = delito;
     }
 
     public void setSosp(Sospechoso sosp) {

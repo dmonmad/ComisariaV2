@@ -24,14 +24,46 @@ import javax.persistence.Table;
 public class Foto implements Serializable {
     
     @Id
-    @Column(name="ANTECEDENTES_ID")
+    @Column(name="FOTO_ID")
     private Long id;
     
     @Column(name = "IMAGEN")
-    private File imagen;
+    private String imagen;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SOSP_ID")
     private Sospechoso sospechoso;
+
+    public Foto() {
+    }
+    
+
+    public Foto(Long id, String imagen, Sospechoso sospechoso) {
+        this.id = id;
+        this.imagen = imagen;
+        this.sospechoso = sospechoso;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public Sospechoso getSospechoso() {
+        return sospechoso;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public void setSospechoso(Sospechoso sospechoso) {
+        this.sospechoso = sospechoso;
+    }
+    
+    
     
 }

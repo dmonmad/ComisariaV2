@@ -28,7 +28,7 @@ public class Correo implements Serializable {
     private Long id;
     
     @Column(name = "EMAIL")
-    private String delito;
+    private String correo;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SOSP_ID")
@@ -36,14 +36,14 @@ public class Correo implements Serializable {
  
     public Correo(){}
 
-    public Correo(Long id, String delito, Sospechoso sospechoso) {
+    public Correo(Long id, String correo, Sospechoso sospechoso) {
         this.id = id;
-        this.delito = delito;
+        this.correo = correo;
         this.sospechoso = sospechoso;
     }
 
-    public void setDelito(String delito) {
-        this.delito = delito;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public void setSospechoso(Sospechoso sospechoso) {
@@ -54,8 +54,8 @@ public class Correo implements Serializable {
         return id;
     }
 
-    public String getDelito() {
-        return delito;
+    public String getCorreo() {
+        return correo;
     }
 
     public Sospechoso getSospechoso() {
