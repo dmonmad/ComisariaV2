@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,7 +25,8 @@ import javax.persistence.Table;
 public class NumeroTelefono implements Serializable {
     
     @Id
-    @Column(name="TELEFONO_ID")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="TELEFONO_ID", updatable = false, nullable = false)
     private Long id;
     
     @Column(name = "NUMERO")

@@ -1,0 +1,84 @@
+2019-12-04 17:36:31 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSO" no encontrada
+Table "SOSPECHOSO" not found; SQL statement:
+select * from sospechoso [42102-200]
+2019-12-04 17:37:27 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSO" no encontrada
+Table "SOSPECHOSO" not found; SQL statement:
+select * from sospechoso [42102-200]
+2019-12-04 17:37:31 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSO" no encontrada
+Table "SOSPECHOSO" not found; SQL statement:
+select * from SOSPECHOSO [42102-200]
+2019-12-04 17:43:30 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSO" no encontrada
+Table "SOSPECHOSO" not found; SQL statement:
+SELECT * FROM SOSPECHOSO [42102-200]
+2019-12-04 17:43:39 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSOS" no encontrada
+Table "SOSPECHOSOS" not found; SQL statement:
+SELECT * FROM SOSPECHOSOS [42102-200]
+2019-12-04 17:43:40 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSOS" no encontrada
+Table "SOSPECHOSOS" not found; SQL statement:
+SELECT * FROM SOSPECHOSOS [42102-200]
+2019-12-04 17:43:40 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSOS" no encontrada
+Table "SOSPECHOSOS" not found; SQL statement:
+SELECT * FROM SOSPECHOSOS [42102-200]
+2019-12-04 17:43:40 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSOS" no encontrada
+Table "SOSPECHOSOS" not found; SQL statement:
+SELECT * FROM SOSPECHOSOS [42102-200]
+2019-12-04 17:43:41 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SOSPECHOSOS" no encontrada
+Table "SOSPECHOSOS" not found; SQL statement:
+SELECT * FROM SOSPECHOSOS [42102-200]
+2019-12-04 18:11:33 jdbc[5]: null
+org.h2.message.DbException: La conexión no fue cerrada por la aplicación y esta siendo limpiada (garbage collected)
+The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:245)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:186)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:152)
+	at org.h2.Driver.connect(Driver.java:69)
+	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:309)
+	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:289)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:785)
+	at org.h2.server.web.WebApp.test(WebApp.java:947)
+	at org.h2.server.web.WebApp.process(WebApp.java:238)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:173)
+	at org.h2.server.web.WebThread.process(WebThread.java:139)
+	at org.h2.server.web.WebThread.run(WebThread.java:94)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: La conexión no fue cerrada por la aplicación y esta siendo limpiada (garbage collected)
+The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	... 16 more
+2019-12-05 00:35:39 jdbc[10]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "SOSPECHOSOS" no encontrada
+Column "SOSPECHOSOS" not found; SQL statement:
+SELECT SOSPECHOSOS [42122-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:453)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:163)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:145)
+	at org.h2.command.dml.Select.prepare(Select.java:1206)
+	at org.h2.command.Parser.prepareCommand(Parser.java:744)
+	at org.h2.engine.Session.prepareLocal(Session.java:657)
+	at org.h2.engine.Session.prepareCommand(Session.java:595)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:212)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1459)
+	at org.h2.server.web.WebApp.query(WebApp.java:1116)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1078)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1065)
+	at org.h2.server.web.WebThread.process(WebThread.java:178)
+	at org.h2.server.web.WebThread.run(WebThread.java:94)
+	at java.lang.Thread.run(Unknown Source)

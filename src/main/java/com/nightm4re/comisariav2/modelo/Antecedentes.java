@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,7 +26,8 @@ import javax.persistence.Table;
 public class Antecedentes implements Serializable {
     
     @Id
-    @Column(name="ANTECEDENTES_ID")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="ANTECEDENTES_ID", updatable = false, nullable = false)
     private Long id;
     
     @Column(name = "DELITO")
@@ -50,7 +53,7 @@ public class Antecedentes implements Serializable {
         return delito;
     }
 
-    public Sospechoso getSosp() {
+    public Sospechoso getSospechoso() {
         return sospechoso;
     }
 
@@ -58,7 +61,7 @@ public class Antecedentes implements Serializable {
         this.delito = delito;
     }
 
-    public void setSosp(Sospechoso sosp) {
+    public void setSospechoso(Sospechoso sosp) {
         this.sospechoso = sosp;
     }
     
