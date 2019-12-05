@@ -25,7 +25,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="SOSPECHOSOS")
-public class Sospechoso implements Serializable {
+public class SospechosoEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,26 +35,29 @@ public class Sospechoso implements Serializable {
     private String nombre;
     @Column(name="NACIONALIDAD")
     private String nacionalidad;
+    @Column(name="DNI")
+    private String dni;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Antecedentes> antecedentes;
+    private List<AntecedentesEntity> antecedentes;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Correo> correos;
+    private List<CorreoEntity> correos;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<NumeroTelefono> telefonos;
+    private List<NumeroTelefonoEntity> telefonos;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Direccion> direcciones;
+    private List<DireccionEntity> direcciones;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Matricula> matriculas;
+    private List<MatriculaEntity> matriculas;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<DatosExtra> datosextra;
+    private List<DatosExtraEntity> datosextra;
     @OneToMany(mappedBy = "sospechoso", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Foto> fotos;
+    private List<FotoEntity> fotos;
 
-   public Sospechoso(){}
+   public SospechosoEntity(){}
 
-    public Sospechoso(String nombre, String nacionalidad, List<Antecedentes> antecedentes, List<Correo> correos, List<DatosExtra> datosextra, List<Direccion> direcciones, List<Foto> fotos, List<Matricula> matriculas,  List<NumeroTelefono> telefonos  ) {
+    public SospechosoEntity(String nombre, String nacionalidad, String dni, List<AntecedentesEntity> antecedentes, List<CorreoEntity> correos, List<DatosExtraEntity> datosextra, List<DireccionEntity> direcciones, List<FotoEntity> fotos, List<MatriculaEntity> matriculas,  List<NumeroTelefonoEntity> telefonos  ) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
+        this.dni = dni;
         this.antecedentes = antecedentes;
         this.correos = correos;
         this.fotos = fotos;
@@ -64,9 +67,10 @@ public class Sospechoso implements Serializable {
         this.datosextra = datosextra;
     }   
 
-    public Sospechoso(String nombre, String nacionalidad) {
+    public SospechosoEntity(String nombre, String nacionalidad, String dni) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
+        this.dni = dni;
     }
 
     public void setId(long id) {
@@ -76,36 +80,40 @@ public class Sospechoso implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+    public void setDni(String dni){
+        this.dni = dni;
+    }
 
     public void setNacionalidad(String nacionalidad) {
         this.nacionalidad = nacionalidad;
     }
 
-    public void setAntecedentes(List<Antecedentes> antecedentes) {
+    public void setAntecedentes(List<AntecedentesEntity> antecedentes) {
         this.antecedentes = antecedentes;
     }
 
-    public void setCorreos(List<Correo> correos) {
+    public void setCorreos(List<CorreoEntity> correos) {
         this.correos = correos;
     }
 
-    public void setTelefonos(List<NumeroTelefono> telefonos) {
+    public void setTelefonos(List<NumeroTelefonoEntity> telefonos) {
         this.telefonos = telefonos;
     }
 
-    public void setDirecciones(List<Direccion> direcciones) {
+    public void setDirecciones(List<DireccionEntity> direcciones) {
         this.direcciones = direcciones;
     }
 
-    public void setMatriculas(List<Matricula> matriculas) {
+    public void setMatriculas(List<MatriculaEntity> matriculas) {
         this.matriculas = matriculas;
     }
 
-    public void setDatosextra(List<DatosExtra> datosextra) {
+    public void setDatosextra(List<DatosExtraEntity> datosextra) {
         this.datosextra = datosextra;
     }
 
-    public void setFotos(List<Foto> fotos) {
+    public void setFotos(List<FotoEntity> fotos) {
         this.fotos = fotos;
     }
     
@@ -118,38 +126,49 @@ public class Sospechoso implements Serializable {
     public String getNombre() {
         return nombre;
     }
+    
+    public String getDni(){
+        return dni;
+    }
 
     public String getNacionalidad() {
         return nacionalidad;
     }
 
-    public List<Antecedentes> getAntecedentes() {
+    public List<AntecedentesEntity> getAntecedentes() {
         return antecedentes;
     }
 
-    public List<Correo> getCorreos() {
+    public List<CorreoEntity> getCorreos() {
         return correos;
     }
 
-    public List<NumeroTelefono> getTelefonos() {
+    public List<NumeroTelefonoEntity> getTelefonos() {
         return telefonos;
     }
 
-    public List<Direccion> getDirecciones() {
+    public List<DireccionEntity> getDirecciones() {
         return direcciones;
     }
 
-    public List<Matricula> getMatriculas() {
+    public List<MatriculaEntity> getMatriculas() {
         return matriculas;
     }
 
-    public List<DatosExtra> getDatosextra() {
+    public List<DatosExtraEntity> getDatosextra() {
         return datosextra;
     }
 
-    public List<Foto> getFotos() {
+    public List<FotoEntity> getFotos() {
         return fotos;
     }
+
+    @Override
+    public String toString() {
+        return "SospechosoEntity{" + "id=" + id + ", nombre=" + nombre + ", nacionalidad=" + nacionalidad + ", dni="+dni+", antecedentes=" + antecedentes + ", correos=" + correos + ", telefonos=" + telefonos + ", direcciones=" + direcciones + ", matriculas=" + matriculas + ", datosextra=" + datosextra + ", fotos=" + fotos + '}';
+    }
+    
+    
 
     
     

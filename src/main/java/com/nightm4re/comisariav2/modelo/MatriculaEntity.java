@@ -5,6 +5,7 @@
  */
 package com.nightm4re.comisariav2.modelo;
 
+import java.io.File;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,36 +21,28 @@ import javax.persistence.Table;
  *
  * @author Nightm4re
  */
-
 @Entity
-@Table(name="CORREO")
-public class Correo implements Serializable {
+@Table(name="MATRICULA")
+public class MatriculaEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="CORREO_ID", updatable = false, nullable = false)
+    @Column(name="MATRICULA_ID", updatable = false, nullable = false)
     private Long id;
     
-    @Column(name = "EMAIL")
-    private String correo;
+    @Column(name = "MATRICULA")
+    private String matricula;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SOSP_ID")
-    private Sospechoso sospechoso;
- 
-    public Correo(){}
+    private SospechosoEntity sospechoso;
 
-    public Correo(Long id, String correo, Sospechoso sospechoso) {
+    public MatriculaEntity() {
+    }
+
+    public MatriculaEntity(Long id, String matricula, SospechosoEntity sospechoso) {
         this.id = id;
-        this.correo = correo;
-        this.sospechoso = sospechoso;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public void setSospechoso(Sospechoso sospechoso) {
+        this.matricula = matricula;
         this.sospechoso = sospechoso;
     }
 
@@ -57,14 +50,27 @@ public class Correo implements Serializable {
         return id;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getMatricula() {
+        return matricula;
     }
 
-    public Sospechoso getSospechoso() {
+    public SospechosoEntity getSospechoso() {
         return sospechoso;
     }
 
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public void setSospechoso(SospechosoEntity sospechoso) {
+        this.sospechoso = sospechoso;
+    }
+
+    @Override
+    public String toString() {
+        return "MatriculaEntity id=" + id + ", matricula=" + matricula;
+    }
+    
+    
+    
 }
-
-

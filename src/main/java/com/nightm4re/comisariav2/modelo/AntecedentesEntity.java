@@ -20,43 +20,54 @@ import javax.persistence.Table;
  *
  * @author Nightm4re
  */
+
 @Entity
-@Table(name="NUMEROTELEFONO")
-public class NumeroTelefono implements Serializable {
+@Table(name="ANTECEDENTES")
+public class AntecedentesEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="TELEFONO_ID", updatable = false, nullable = false)
+    @Column(name="ANTECEDENTES_ID", updatable = false, nullable = false)
     private Long id;
     
-    @Column(name = "NUMERO")
-    private String numero;
+    @Column(name = "DELITO")
+    private String delito;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SOSP_ID")
-    private Sospechoso sospechoso;
-
-    public NumeroTelefono() {
+    private SospechosoEntity sospechoso;
+    
+    public AntecedentesEntity(){}
+    
+    public AntecedentesEntity(Long id, String titulo, SospechosoEntity sosp) {
+        this.id = id;
+        this.delito = titulo;
+        this.sospechoso = sosp;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getTitulo() {
+        return delito;
     }
 
-    public Sospechoso getSospechoso() {
+    public SospechosoEntity getSospechoso() {
         return sospechoso;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setDelito(String delito) {
+        this.delito = delito;
     }
 
-    public void setSospechoso(Sospechoso sospechoso) {
-        this.sospechoso = sospechoso;
+    public void setSospechoso(SospechosoEntity sosp) {
+        this.sospechoso = sosp;
+    }
+
+    @Override
+    public String toString() {
+        return "AntecedentesEntity id=" + id + ", delito=" + delito ;
     }
     
     

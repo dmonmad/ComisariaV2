@@ -3,15 +3,14 @@
   <persistence-unit name="comisariav2">
     <!-- ojo con el nombre-->
     <!-- Representación de las clases-->
-    
-    <class>com.nightm4re.comisariav2.modelo.Antecedentes</class>
-    <class>com.nightm4re.comisariav2.modelo.Correo</class>
-    <class>com.nightm4re.comisariav2.modelo.DatosExtra</class>
-    <class>com.nightm4re.comisariav2.modelo.Direccion</class>
-    <class>com.nightm4re.comisariav2.modelo.Foto</class>
-    <class>com.nightm4re.comisariav2.modelo.Sospechoso</class>
-    <class>com.nightm4re.comisariav2.modelo.Matricula</class>
-    <class>com.nightm4re.comisariav2.modelo.NumeroTelefono</class>
+    <class>com.nightm4re.comisariav2.modelo.AntecedentesEntity</class>
+    <class>com.nightm4re.comisariav2.modelo.CorreoEntity</class>
+    <class>com.nightm4re.comisariav2.modelo.DatosExtraEntity</class>
+    <class>com.nightm4re.comisariav2.modelo.DireccionEntity</class>
+    <class>com.nightm4re.comisariav2.modelo.FotoEntity</class>
+    <class>com.nightm4re.comisariav2.modelo.MatriculaEntity</class>
+    <class>com.nightm4re.comisariav2.modelo.NumeroTelefonoEntity</class>
+    <class>com.nightm4re.comisariav2.modelo.SospechosoEntity</class>
     <properties>
       <!-- en memoria -->
       <!-- en disco ~ -->
@@ -22,7 +21,7 @@
       <property name="javax.persistence.jdbc.user" value="sa"/>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
       <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="hibernate.hbm2ddl.auto" value="create-drop" /> 
+      <property name="hibernate.hbm2ddl.auto" value="validate"/>
     </properties>
   </persistence-unit>
 </persistence>

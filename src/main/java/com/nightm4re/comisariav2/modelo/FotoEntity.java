@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="FOTO")
-public class Foto implements Serializable {
+public class FotoEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,13 +35,13 @@ public class Foto implements Serializable {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SOSP_ID")
-    private Sospechoso sospechoso;
+    private SospechosoEntity sospechoso;
 
-    public Foto() {
+    public FotoEntity() {
     }
     
 
-    public Foto(Long id, String imagen, Sospechoso sospechoso) {
+    public FotoEntity(Long id, String imagen, SospechosoEntity sospechoso) {
         this.id = id;
         this.imagen = imagen;
         this.sospechoso = sospechoso;
@@ -55,7 +55,7 @@ public class Foto implements Serializable {
         return imagen;
     }
 
-    public Sospechoso getSospechoso() {
+    public SospechosoEntity getSospechoso() {
         return sospechoso;
     }
 
@@ -63,8 +63,13 @@ public class Foto implements Serializable {
         this.imagen = imagen;
     }
 
-    public void setSospechoso(Sospechoso sospechoso) {
+    public void setSospechoso(SospechosoEntity sospechoso) {
         this.sospechoso = sospechoso;
+    }
+
+    @Override
+    public String toString() {
+        return "FotoEntity id=" + id + ", imagen=" + imagen;
     }
     
     

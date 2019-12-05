@@ -5,7 +5,6 @@
  */
 package com.nightm4re.comisariav2.modelo;
 
-import java.io.File;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,27 +21,34 @@ import javax.persistence.Table;
  * @author Nightm4re
  */
 @Entity
-@Table(name="MATRICULA")
-public class Matricula implements Serializable {
+@Table(name="DATOSEXTRA")
+public class DatosExtraEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="MATRICULA_ID", updatable = false, nullable = false)
+    @Column(name="DATO_ID", updatable = false, nullable = false)
     private Long id;
     
-    @Column(name = "MATRICULA")
-    private String matricula;
+    @Column(name = "DATO")
+    private String dato;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SOSP_ID")
-    private Sospechoso sospechoso;
+    private SospechosoEntity sospechoso;
+    
+    public DatosExtraEntity(){}
 
-    public Matricula() {
+    public DatosExtraEntity(Long id, String dato, SospechosoEntity sospechoso) {
+        this.id = id;
+        this.dato = dato;
+        this.sospechoso = sospechoso;
     }
 
-    public Matricula(Long id, String matricula, Sospechoso sospechoso) {
-        this.id = id;
-        this.matricula = matricula;
+    public void setDato(String dato) {
+        this.dato = dato;
+    }
+
+    public void setSospechoso(SospechosoEntity sospechoso) {
         this.sospechoso = sospechoso;
     }
 
@@ -50,22 +56,20 @@ public class Matricula implements Serializable {
         return id;
     }
 
-    public String getMatricula() {
-        return matricula;
+    public String getDato() {
+        return dato;
     }
 
-    public Sospechoso getSospechoso() {
+    public SospechosoEntity getSospechoso() {
         return sospechoso;
     }
 
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public void setSospechoso(Sospechoso sospechoso) {
-        this.sospechoso = sospechoso;
+    @Override
+    public String toString() {
+        return "DatosExtraEntity id=" + id + ", dato=" + dato;
     }
     
     
     
 }
+

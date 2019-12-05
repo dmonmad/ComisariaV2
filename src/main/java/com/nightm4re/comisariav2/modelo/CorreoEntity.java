@@ -20,28 +20,36 @@ import javax.persistence.Table;
  *
  * @author Nightm4re
  */
-    
-    @Entity
-@Table(name="DIRECCION")
-public class Direccion implements Serializable {
+
+@Entity
+@Table(name="CORREO")
+public class CorreoEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="DIRECCION_ID", updatable = false, nullable = false)
+    @Column(name="CORREO_ID", updatable = false, nullable = false)
     private Long id;
     
-    @Column(name = "DIRECCION")
-    private String direccion;
+    @Column(name = "EMAIL")
+    private String correo;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SOSP_ID")
-    private Sospechoso sospechoso;
-    
-    public Direccion(){}
+    private SospechosoEntity sospechoso;
+ 
+    public CorreoEntity(){}
 
-    public Direccion(Long id, String direccion, Sospechoso sospechoso) {
+    public CorreoEntity(Long id, String correo, SospechosoEntity sospechoso) {
         this.id = id;
-        this.direccion = direccion;
+        this.correo = correo;
+        this.sospechoso = sospechoso;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public void setSospechoso(SospechosoEntity sospechoso) {
         this.sospechoso = sospechoso;
     }
 
@@ -49,22 +57,21 @@ public class Direccion implements Serializable {
         return id;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getCorreo() {
+        return correo;
     }
 
-    public Sospechoso getSospechoso() {
+    public SospechosoEntity getSospechoso() {
         return sospechoso;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    @Override
+    public String toString() {
+        return "CorreoEntity id=" + id + ", correo=" + correo;
     }
+    
+    
 
-    public void setSospechoso(Sospechoso sospechoso) {
-        this.sospechoso = sospechoso;
-    }
-    
-    
-    
 }
+
+
