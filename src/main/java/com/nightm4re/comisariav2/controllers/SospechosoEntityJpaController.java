@@ -67,69 +67,7 @@ public class SospechosoEntityJpaController implements Serializable {
             em.getTransaction().begin();
             
             em.persist(sospechosoEntity);
-            for (AntecedentesEntity antecedentesAntecedentesEntity : sospechosoEntity.getAntecedentes()) {
-                SospechosoEntity oldSospechosoOfAntecedentesAntecedentesEntity = antecedentesAntecedentesEntity.getSospechoso();
-                antecedentesAntecedentesEntity.setSospechoso(sospechosoEntity);
-                antecedentesAntecedentesEntity = em.merge(antecedentesAntecedentesEntity);
-                if (oldSospechosoOfAntecedentesAntecedentesEntity != null) {
-                    oldSospechosoOfAntecedentesAntecedentesEntity.getAntecedentes().remove(antecedentesAntecedentesEntity);
-                    oldSospechosoOfAntecedentesAntecedentesEntity = em.merge(oldSospechosoOfAntecedentesAntecedentesEntity);
-                }
-            }
-            for (CorreoEntity correosCorreoEntity : sospechosoEntity.getCorreos()) {
-                SospechosoEntity oldSospechosoOfCorreosCorreoEntity = correosCorreoEntity.getSospechoso();
-                correosCorreoEntity.setSospechoso(sospechosoEntity);
-                correosCorreoEntity = em.merge(correosCorreoEntity);
-                if (oldSospechosoOfCorreosCorreoEntity != null) {
-                    oldSospechosoOfCorreosCorreoEntity.getCorreos().remove(correosCorreoEntity);
-                    oldSospechosoOfCorreosCorreoEntity = em.merge(oldSospechosoOfCorreosCorreoEntity);
-                }
-            }
-            for (NumeroTelefonoEntity telefonosNumeroTelefonoEntity : sospechosoEntity.getTelefonos()) {
-                SospechosoEntity oldSospechosoOfTelefonosNumeroTelefonoEntity = telefonosNumeroTelefonoEntity.getSospechoso();
-                telefonosNumeroTelefonoEntity.setSospechoso(sospechosoEntity);
-                telefonosNumeroTelefonoEntity = em.merge(telefonosNumeroTelefonoEntity);
-                if (oldSospechosoOfTelefonosNumeroTelefonoEntity != null) {
-                    oldSospechosoOfTelefonosNumeroTelefonoEntity.getTelefonos().remove(telefonosNumeroTelefonoEntity);
-                    oldSospechosoOfTelefonosNumeroTelefonoEntity = em.merge(oldSospechosoOfTelefonosNumeroTelefonoEntity);
-                }
-            }
-            for (DireccionEntity direccionesDireccionEntity : sospechosoEntity.getDirecciones()) {
-                SospechosoEntity oldSospechosoOfDireccionesDireccionEntity = direccionesDireccionEntity.getSospechoso();
-                direccionesDireccionEntity.setSospechoso(sospechosoEntity);
-                direccionesDireccionEntity = em.merge(direccionesDireccionEntity);
-                if (oldSospechosoOfDireccionesDireccionEntity != null) {
-                    oldSospechosoOfDireccionesDireccionEntity.getDirecciones().remove(direccionesDireccionEntity);
-                    oldSospechosoOfDireccionesDireccionEntity = em.merge(oldSospechosoOfDireccionesDireccionEntity);
-                }
-            }
-            for (MatriculaEntity matriculasMatriculaEntity : sospechosoEntity.getMatriculas()) {
-                SospechosoEntity oldSospechosoOfMatriculasMatriculaEntity = matriculasMatriculaEntity.getSospechoso();
-                matriculasMatriculaEntity.setSospechoso(sospechosoEntity);
-                matriculasMatriculaEntity = em.merge(matriculasMatriculaEntity);
-                if (oldSospechosoOfMatriculasMatriculaEntity != null) {
-                    oldSospechosoOfMatriculasMatriculaEntity.getMatriculas().remove(matriculasMatriculaEntity);
-                    oldSospechosoOfMatriculasMatriculaEntity = em.merge(oldSospechosoOfMatriculasMatriculaEntity);
-                }
-            }
-            for (DatosExtraEntity datosextraDatosExtraEntity : sospechosoEntity.getDatosextra()) {
-                SospechosoEntity oldSospechosoOfDatosextraDatosExtraEntity = datosextraDatosExtraEntity.getSospechoso();
-                datosextraDatosExtraEntity.setSospechoso(sospechosoEntity);
-                datosextraDatosExtraEntity = em.merge(datosextraDatosExtraEntity);
-                if (oldSospechosoOfDatosextraDatosExtraEntity != null) {
-                    oldSospechosoOfDatosextraDatosExtraEntity.getDatosextra().remove(datosextraDatosExtraEntity);
-                    oldSospechosoOfDatosextraDatosExtraEntity = em.merge(oldSospechosoOfDatosextraDatosExtraEntity);
-                }
-            }
-            for (FotoEntity fotosFotoEntity : sospechosoEntity.getFotos()) {
-                SospechosoEntity oldSospechosoOfFotosFotoEntity = fotosFotoEntity.getSospechoso();
-                fotosFotoEntity.setSospechoso(sospechosoEntity);
-                fotosFotoEntity = em.merge(fotosFotoEntity);
-                if (oldSospechosoOfFotosFotoEntity != null) {
-                    oldSospechosoOfFotosFotoEntity.getFotos().remove(fotosFotoEntity);
-                    oldSospechosoOfFotosFotoEntity = em.merge(oldSospechosoOfFotosFotoEntity);
-                }
-            }
+            
             em.getTransaction().commit();
         } finally {
             if (em != null) {

@@ -54,7 +54,7 @@ public class SospechosoEntity implements Serializable {
 
    public SospechosoEntity(){}
 
-    public SospechosoEntity(String nombre, String nacionalidad, String dni, List<AntecedentesEntity> antecedentes, List<CorreoEntity> correos, List<DatosExtraEntity> datosextra, List<DireccionEntity> direcciones, List<FotoEntity> fotos, List<MatriculaEntity> matriculas,  List<NumeroTelefonoEntity> telefonos  ) {
+    public SospechosoEntity(String nombre, String dni, String nacionalidad, List<AntecedentesEntity> antecedentes, List<CorreoEntity> correos, List<DatosExtraEntity> datosextra, List<DireccionEntity> direcciones, List<FotoEntity> fotos, List<MatriculaEntity> matriculas,  List<NumeroTelefonoEntity> telefonos  ) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
         this.dni = dni;
@@ -67,7 +67,7 @@ public class SospechosoEntity implements Serializable {
         this.datosextra = datosextra;
     }   
 
-    public SospechosoEntity(String nombre, String nacionalidad, String dni) {
+    public SospechosoEntity(String nombre, String dni, String nacionalidad) {
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
         this.dni = dni;

@@ -21,8 +21,7 @@ import javax.persistence.Query;
  */
 public class MainClass {
     
-    private static EntityManager manager;
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("comisariav2");
+    
     
     public static void main(String[] args){
         
@@ -105,8 +104,8 @@ public class MainClass {
         sosp.setTelefonos(telefono);
         sosp.setDirecciones(direccion);
         
-        SospechosoEntityJpaController sospcont = new SospechosoEntityJpaController(emf);
-        sospcont.create(sosp);
+//        SospechosoEntityJpaController sospcont = new SospechosoEntityJpaController();
+//        sospcont.create(sosp);
         
 //        manager.persist(c);
 //        manager.persist(an);
@@ -122,20 +121,20 @@ public class MainClass {
     }
 
     private static void leerdatos() {
-        EntityManager manager = emf.createEntityManager();
-        manager.getTransaction().begin();
+        //EntityManager manager = emf.createEntityManager();
+        //manager.getTransaction().begin();
         
 
-        List<SospechosoEntity> misempleados=manager.createQuery("FROM SospechosoEntity", SospechosoEntity.class).getResultList();
-        System.out.println("Hay "+misempleados.size()+" empleados");
+        //List<SospechosoEntity> misempleados=manager.createQuery("FROM SospechosoEntity", SospechosoEntity.class).getResultList();
+        //System.out.println("Hay "+misempleados.size()+" empleados");
         
-        for(SospechosoEntity e : misempleados){
-            System.out.println(e);
-        }
+        //for(SospechosoEntity e : misempleados){
+            //System.out.println(e);
+        //}
 
         
-        manager.getTransaction().commit();
-        manager.close();
+        //manager.getTransaction().commit();
+        //manager.close();
     }
     
 }

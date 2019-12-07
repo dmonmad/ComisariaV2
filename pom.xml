@@ -5,6 +5,13 @@
     <artifactId>ComisariaV2</artifactId>
     <version>0.1-ALPHA</version>
     <packaging>jar</packaging>
+    <repositories>
+        <repository>
+            <id>unknown-jars-temp-repo</id>
+            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -31,6 +38,11 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.0.0.Alpha2</version>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>
