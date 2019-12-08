@@ -8,8 +8,12 @@ package com.nightm4re.comisariav2.vista;
 import com.nightm4re.comisariav2.Controller;
 import com.nightm4re.comisariav2.utils.Utils;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +39,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class VistaPrincipal extends javax.swing.JFrame {
 
-    
-    
+    VistaData vistadata = new VistaData();
+    int contador = 1;
+
     /**
      * Creates new form VistaPrincipal
      */
@@ -60,6 +65,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         }
 
         initComponents();
+        
+        updateTabla();
     }
 
     /**
@@ -144,7 +151,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
         correosEditArea = new javax.swing.JTextArea();
 
         addDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        addDialog.setPreferredSize(new java.awt.Dimension(504, 712));
         addDialog.setResizable(false);
         addDialog.setSize(new java.awt.Dimension(504, 712));
 
@@ -159,6 +165,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         addScrollVisor.setMaximumSize(new java.awt.Dimension(900000, 258));
         addScrollVisor.setMinimumSize(new java.awt.Dimension(102, 119));
 
+        addImagesVisor.setBackground(new java.awt.Color(249, 249, 249));
         addImagesVisor.setMaximumSize(new java.awt.Dimension(900000, 258));
         addImagesVisor.setMinimumSize(new java.awt.Dimension(0, 0));
         addImagesVisor.setName("addImagesVisor"); // NOI18N
@@ -168,8 +175,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         filler2.setName("NOTTHIS"); // NOI18N
         addImagesVisor.add(filler2);
 
-        addImage.setBackground(new java.awt.Color(0, 153, 255));
-        addImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addfoto.png"))); // NOI18N
+        addImage.setBackground(new java.awt.Color(255, 255, 255));
+        addImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/anadir-imagen.png"))); // NOI18N
         addImage.setMaximumSize(new java.awt.Dimension(50, 50));
         addImage.setMinimumSize(new java.awt.Dimension(50, 50));
         addImage.setPreferredSize(new java.awt.Dimension(50, 50));
@@ -238,7 +245,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         datosExtraAddArea.setRows(5);
         jScrollPane14.setViewportView(datosExtraAddArea);
 
-        saveButton.setBackground(new java.awt.Color(0, 255, 0));
+        saveButton.setBackground(new java.awt.Color(0, 204, 255));
+        saveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/disco-flexible.png"))); // NOI18N
         saveButton.setText("GUARDAR");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -247,6 +255,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         });
 
         cancelButton.setBackground(new java.awt.Color(255, 0, 0));
+        cancelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/borrar.png"))); // NOI18N
         cancelButton.setText("CANCELAR");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -405,20 +414,24 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         ));
         dataTable.setRowHeight(30);
+        dataTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        dataTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(dataTable);
 
         searchField.setText("jTextField1");
 
-        addButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 11)); // NOI18N
+        addButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 12)); // NOI18N
         addButton.setText("Añadir registro");
+        addButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
             }
         });
 
-        deleteButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 11)); // NOI18N
+        deleteButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 12)); // NOI18N
         deleteButton.setText("Eliminar registro");
+        deleteButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
@@ -690,74 +703,21 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        String isValid = Controller.getController().addSospechoso(nombreAddField.getText(), dniAddField.getText(), nacionalidadAddField.getText(), antecedentesAddArea.getText(),
-                correosAddArea.getText(), direccionesAddArea.getText(), matriculasAddArea.getText(), numerosAddArea.getText(), datosExtraAddArea.getText());
-        if (!isValid.equals("Hay errores en: ")) {
-            JOptionPane.showMessageDialog(this, isValid,"ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
+        Boolean isValid = Controller.getController().addSospechoso(nombreAddField.getText(), dniAddField.getText(), nacionalidadAddField.getText(), antecedentesAddArea.getText(),
+                correosAddArea.getText(), direccionesAddArea.getText(), matriculasAddArea.getText(), numerosAddArea.getText(), datosExtraAddArea.getText(), vistadata.getAllUrls());
+        if (!isValid) {
+            JOptionPane.showMessageDialog(this, "Hubo un error añadiendo el registro.", "ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            this.clearAddDialog();
+            addDialog.setVisible(false);
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void addImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addImageActionPerformed
-        JLabel nuevoLabel = null;
-        byte[] bytesImg;
-        boolean fixed = false;
-        Icon icono = null;
-        
-        int returnVal = imageChooser.showOpenDialog(this);
-        
-        if(returnVal == JFileChooser.APPROVE_OPTION){
-            File archivo = imageChooser.getSelectedFile();
-            if(archivo.canRead()){
-                
-                String imagepath = imageChooser.getSelectedFile().getAbsolutePath();
-                BufferedImage image = null;
-                
-                try{
-                    image = ImageIO.read(new File(imagepath));
-                }catch(IOException e){
-                    JOptionPane.showMessageDialog(this, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
-                }
-                
-                Dimension imageDimension = Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()),
-                        new Dimension(addScrollVisor.getWidth() / 4 - 10, addScrollVisor.getHeight() / 2-10));
-                
-//                Image resImage = image.getScaledInstance(addImagesVisor.getWidth() / 4 - 10, 
-//                        addImagesVisor.getHeight() / 2 - 10, Image.SCALE_SMOOTH);
+        addImageToVisor();
 
-                Image resImage = image.getScaledInstance((int)imageDimension.getWidth(), 
-                        (int)imageDimension.getHeight(), Image.SCALE_SMOOTH);
-                
-                icono = new ImageIcon(resImage);
-
-                nuevoLabel = new JLabel("", icono, JLabel.CENTER);
-                String nombre = "image"+ String.valueOf(addImagesVisor.getComponentCount() + 1);
-                System.out.println(nombre);
-                nuevoLabel.setName(nombre);
-                nuevoLabel.setSize(addScrollVisor.getWidth() / 4, addScrollVisor.getHeight() / 2);
-                addImagesVisor.add(Box.createRigidArea(new Dimension(10, 0)));
-                addImagesVisor.add(nuevoLabel);
-                
-                nuevoLabel.setIcon(new ImageIcon(resImage));
-                nuevoLabel.setVisible(true);
-                
-                
-            }else{
-                JOptionPane.showMessageDialog(this, "No se puede leer el archivo.\n Compruebe los permisos de lectura.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
-            }
-            
-            if (addImagesVisor.getComponentCount() > 8) {
-                if (!fixed) {
-                    Dimension d = new Dimension(addImagesVisor.getWidth() + (int) icono.getIconWidth() + 10, addImagesVisor.getHeight());
-                    addImagesVisor.setPreferredSize(d);
-                    fixed = true;
-                }
-            }
-            
-            addImagesVisor.revalidate();
-        }
-        
-        
     }//GEN-LAST:event_addImageActionPerformed
+
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -772,13 +732,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-
-        //</editor-fold>
+       
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -864,19 +818,19 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     private void clearAddDialog() {
         for (Component componente : addImagesVisor.getComponents()) {
-            System.out.println("####### "+componente.getClass());
+            System.out.println("####### " + componente.getClass());
             if (componente instanceof JLabel && componente.getName().startsWith("image")) {
-                System.out.println("####### "+componente.getName());
+                System.out.println("####### " + componente.getName());
                 addImagesVisor.remove(componente);
             }
-            
-            if (componente instanceof Filler && !"NOTTHIS".equals(componente.getName())){
+
+            if (componente instanceof Filler && !"NOTTHIS".equals(componente.getName())) {
                 System.out.println("####### REMOVED");
                 addImagesVisor.remove(componente);
             }
         }
-        
-        addImagesVisor.revalidate();
+
+        updateContainer(addImagesVisor);
 
         for (Component componente : addContainer.getComponents()) {
             System.out.println("Entrando");
@@ -904,5 +858,82 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         }
 
+        vistadata.removeAllMap();
+
+    }
+
+    private void addImageToVisor() throws HeadlessException {
+        JLabel nuevoLabel = null;
+        boolean fixed = false;
+        Icon icono = null;
+
+        int returnVal = imageChooser.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File archivo = imageChooser.getSelectedFile();
+            if (archivo.canRead()) {
+
+                String imagepath = imageChooser.getSelectedFile().getAbsolutePath();
+                BufferedImage image = null;
+
+                try {
+                    image = ImageIO.read(new File(imagepath));
+                    vistadata.addJlabelUrl(nuevoLabel, imagepath);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(this, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+                }
+
+                Dimension imageDimension = Utils.getScaledDimension(new Dimension(image.getWidth(), image.getHeight()),
+                        new Dimension(addScrollVisor.getWidth() / 4 - 10, addScrollVisor.getHeight() / 2 - 10));
+
+                Image resImage = image.getScaledInstance((int) imageDimension.getWidth(),
+                        (int) imageDimension.getHeight(), Image.SCALE_SMOOTH);
+
+                icono = new ImageIcon(resImage);
+
+                nuevoLabel = new JLabel("", icono, JLabel.CENTER);
+                String nombre = "image" + String.valueOf(addImagesVisor.getComponentCount() + contador);
+                contador++;
+                System.out.println(nombre);
+                nuevoLabel.setName(nombre);
+                nuevoLabel.setSize(addScrollVisor.getWidth() / 4, addScrollVisor.getHeight() / 2);
+                nuevoLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        System.out.println("WORKING");
+                        vistadata.removeJlabelUrl(jLabel1);
+                        addImagesVisor.remove(e.getComponent());
+                        updateContainer(addImagesVisor);
+                    }
+
+                });
+                addImagesVisor.add(Box.createRigidArea(new Dimension(10, 0)));
+                addImagesVisor.add(nuevoLabel);
+
+                nuevoLabel.setIcon(new ImageIcon(resImage));
+                nuevoLabel.setVisible(true);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "No se puede leer el archivo.\n Compruebe los permisos de lectura.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+            }
+
+            //            if (addImagesVisor.getComponentCount() > 8) {
+//                if (!fixed) {
+//                    Dimension d = new Dimension(addImagesVisor.getWidth() + (int) icono.getIconWidth() + 10, addImagesVisor.getHeight());
+//                    addImagesVisor.setPreferredSize(d);
+//                    fixed = true;
+//                }
+//            }
+            updateContainer(addImagesVisor);
+        }
+    }
+
+    private void updateContainer(Container panel) {
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    private void updateTabla() {
+        dataTable.setModel(Controller.getController().getSospechosos());
     }
 }

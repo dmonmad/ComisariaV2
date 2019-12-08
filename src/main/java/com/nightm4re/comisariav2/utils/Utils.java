@@ -9,22 +9,37 @@ import com.nightm4re.comisariav2.modelo.AntecedentesEntity;
 import com.nightm4re.comisariav2.modelo.CorreoEntity;
 import com.nightm4re.comisariav2.modelo.DatosExtraEntity;
 import com.nightm4re.comisariav2.modelo.DireccionEntity;
+import com.nightm4re.comisariav2.modelo.FotoEntity;
 import com.nightm4re.comisariav2.modelo.MatriculaEntity;
 import com.nightm4re.comisariav2.modelo.NumeroTelefonoEntity;
 import com.nightm4re.comisariav2.modelo.SospechosoEntity;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
+import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Random;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Nightm4re
  */
 public class Utils {
-    
-    public static ArrayList<AntecedentesEntity> AntecedentesStringToList(String antecedentes, SospechosoEntity sospechoso){
+
+    final static String key = "Mary has one cat1";
+
+    ;
+
+    public static ArrayList<AntecedentesEntity> AntecedentesStringToList(String antecedentes, SospechosoEntity sospechoso) {
         ArrayList<AntecedentesEntity> antecedenteslist = new ArrayList<>();
         String[] antec = antecedentes.split("\\n");
-        for(int i = 0; i<antec.length ; i++){
+        for (int i = 0; i < antec.length; i++) {
             AntecedentesEntity ant = new AntecedentesEntity();
             ant.setDelito(antec[i]);
             ant.setSospechoso(sospechoso);
@@ -32,11 +47,11 @@ public class Utils {
         }
         return antecedenteslist;
     }
-    
-    public static ArrayList<CorreoEntity> CorreosStringToList(String correos, SospechosoEntity sospechoso){
+
+    public static ArrayList<CorreoEntity> CorreosStringToList(String correos, SospechosoEntity sospechoso) {
         ArrayList<CorreoEntity> correoslist = new ArrayList<>();
         String[] corrarray = correos.split("\\n");
-        for(int i = 0; i<corrarray.length ; i++){
+        for (int i = 0; i < corrarray.length; i++) {
             CorreoEntity dir = new CorreoEntity();
             dir.setCorreo(corrarray[i]);
             dir.setSospechoso(sospechoso);
@@ -44,11 +59,11 @@ public class Utils {
         }
         return correoslist;
     }
-    
-    public static ArrayList<DireccionEntity> DireccionesStringToList(String direcciones, SospechosoEntity sospechoso){
+
+    public static ArrayList<DireccionEntity> DireccionesStringToList(String direcciones, SospechosoEntity sospechoso) {
         ArrayList<DireccionEntity> direccioneslist = new ArrayList<>();
         String[] dirarray = direcciones.split("\\n");
-        for(int i = 0; i<dirarray.length ; i++){
+        for (int i = 0; i < dirarray.length; i++) {
             DireccionEntity dir = new DireccionEntity();
             dir.setDireccion(dirarray[i]);
             dir.setSospechoso(sospechoso);
@@ -56,11 +71,11 @@ public class Utils {
         }
         return direccioneslist;
     }
-    
-    public static ArrayList<MatriculaEntity> MatriculasStringToList(String matriculas, SospechosoEntity sospechoso){
+
+    public static ArrayList<MatriculaEntity> MatriculasStringToList(String matriculas, SospechosoEntity sospechoso) {
         ArrayList<MatriculaEntity> matriculaslist = new ArrayList<>();
         String[] matrarray = matriculas.split("\\n");
-        for(int i = 0; i<matrarray.length ; i++){
+        for (int i = 0; i < matrarray.length; i++) {
             MatriculaEntity mat = new MatriculaEntity();
             mat.setMatricula(matrarray[i]);
             mat.setSospechoso(sospechoso);
@@ -68,11 +83,11 @@ public class Utils {
         }
         return matriculaslist;
     }
-    
-    public static ArrayList<NumeroTelefonoEntity> NumerosStringToList(String numeros, SospechosoEntity sospechoso){
+
+    public static ArrayList<NumeroTelefonoEntity> NumerosStringToList(String numeros, SospechosoEntity sospechoso) {
         ArrayList<NumeroTelefonoEntity> antecedenteslist = new ArrayList<>();
         String[] numarray = numeros.split("\\n");
-        for(int i = 0; i<numarray.length ; i++){
+        for (int i = 0; i < numarray.length; i++) {
             NumeroTelefonoEntity num = new NumeroTelefonoEntity();
             num.setNumero(numarray[i]);
             num.setSospechoso(sospechoso);
@@ -80,11 +95,11 @@ public class Utils {
         }
         return antecedenteslist;
     }
-    
-    public static ArrayList<DatosExtraEntity> DatosExtraStringToList(String datosextra, SospechosoEntity sospechoso){
+
+    public static ArrayList<DatosExtraEntity> DatosExtraStringToList(String datosextra, SospechosoEntity sospechoso) {
         ArrayList<DatosExtraEntity> datosextralist = new ArrayList<>();
         String[] datext = datosextra.split("\\n");
-        for(int i = 0; i<datext.length ; i++){
+        for (int i = 0; i < datext.length; i++) {
             DatosExtraEntity dato = new DatosExtraEntity();
             dato.setDato(datext[i]);
             dato.setSospechoso(sospechoso);
@@ -93,35 +108,121 @@ public class Utils {
         return datosextralist;
     }
 
+    public static ArrayList<FotoEntity> FotosStringToList(String fotos, SospechosoEntity sospechoso) {
+        ArrayList<FotoEntity> fotoslist = new ArrayList<>();
+        String[] datext = fotos.split("\\n");
+        for (int i = 0; i < datext.length; i++) {
+            FotoEntity dato = new FotoEntity();
+            dato.setImagen(datext[i]);
+            dato.setSospechoso(sospechoso);
+            fotoslist.add(dato);
+        }
+        return fotoslist;
+    }
+
+    public static String EncodeImagesToFiles(String fotos) {
+        StringBuilder sb = new StringBuilder("");
+
+        String[] datext = fotos.split("\\n");
+
+        for (int i = 0; i < datext.length; i++) {
+            try {
+                
+                File archivo = new File(datext[i]);
+                if (archivo.canRead()) {
+
+                    EncodingUtils.encode(archivo, generateRandomFile());
+
+                }else{
+                    JOptionPane.showMessageDialog(null, "No se puede leer el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception e) {
+                LogToFile(e);
+            }
+
+        }
+
+        return sb.toString();
+    }
+
     public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
 
-    int original_width = imgSize.width;
-    int original_height = imgSize.height;
-    int bound_width = boundary.width;
-    int bound_height = boundary.height;
-    int new_width = original_width;
-    int new_height = original_height;
+        int original_width = imgSize.width;
+        int original_height = imgSize.height;
+        int bound_width = boundary.width;
+        int bound_height = boundary.height;
+        int new_width = original_width;
+        int new_height = original_height;
 
-    // first check if we need to scale width
-    if (original_width > bound_width) {
-        //scale width to fit
-        new_width = bound_width;
-        //scale height to maintain aspect ratio
-        new_height = (new_width * original_height) / original_width;
+        // first check if we need to scale width
+        if (original_width > bound_width) {
+            //scale width to fit
+            new_width = bound_width;
+            //scale height to maintain aspect ratio
+            new_height = (new_width * original_height) / original_width;
+        }
+
+        // then check if we need to scale even with the new height
+        if (new_height > bound_height) {
+            //scale height to fit instead
+            new_height = bound_height;
+            //scale width to maintain aspect ratio
+            new_width = (new_height * original_width) / original_height;
+        }
+
+        return new Dimension(new_width, new_height);
     }
 
-    // then check if we need to scale even with the new height
-    if (new_height > bound_height) {
-        //scale height to fit instead
-        new_height = bound_height;
-        //scale width to maintain aspect ratio
-        new_width = (new_height * original_width) / original_height;
+    public static void LogToFile(Exception e) {
+
+        try {
+            FileWriter fw = new FileWriter("log.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw, true);
+            e.printStackTrace(out);
+        } catch (Exception ie) {
+            System.out.println("Could not write Exception to file: " + ie);
+        }
+
     }
 
-    return new Dimension(new_width, new_height);
-}
-    
-    
-    
-    
+    public static void EncodeImageToFile(String file) {
+
+        try {
+
+            File archivo = new File(file);
+            if (archivo.canRead()) {
+
+                EncodingUtils.encode(new File(file), generateRandomFile());
+
+                JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+
+            }
+
+        } catch (HeadlessException e) {
+
+        }
+
+    }
+
+    public static File generateRandomFile() {
+        int nombre = 0;
+        boolean isvalid = false;
+        File enc = null;
+        while (!isvalid) {
+            nombre = (int) (1000000 + (Math.random() * 999999));
+            System.out.println("WHILE");
+            try {
+                enc = new File("./database/" + ".imgfiles/" + nombre + ".data");
+                if (!enc.exists() && !enc.isDirectory()) {
+                    isvalid = true;
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return enc;
+    }
+
 }
