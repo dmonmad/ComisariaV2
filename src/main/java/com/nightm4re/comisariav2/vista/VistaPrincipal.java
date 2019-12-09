@@ -6,6 +6,7 @@
 package com.nightm4re.comisariav2.vista;
 
 import com.nightm4re.comisariav2.Controller;
+import com.nightm4re.comisariav2.modelo.SospechosoEntity;
 import com.nightm4re.comisariav2.utils.Utils;
 import java.awt.Component;
 import java.awt.Container;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.Box.Filler;
@@ -31,6 +33,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -65,8 +69,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         }
 
         initComponents();
-        
-        updateTabla();
+
+        updateTable();
     }
 
     /**
@@ -124,7 +128,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        nameEditField = new javax.swing.JTextField();
+        nombreEditField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         dniEditField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -141,14 +145,15 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         numerosEditArea = new javax.swing.JTextArea();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        picVisorPanel = new javax.swing.JPanel();
+        editScrollVisor = new javax.swing.JScrollPane();
+        editImageVisor = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jScrollPane15 = new javax.swing.JScrollPane();
-        numerosEditArea1 = new javax.swing.JTextArea();
+        datosextraEditArea = new javax.swing.JTextArea();
         jLabel18 = new javax.swing.JLabel();
         jScrollPane16 = new javax.swing.JScrollPane();
         correosEditArea = new javax.swing.JTextArea();
+        saveEdit = new javax.swing.JButton();
 
         addDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addDialog.setResizable(false);
@@ -417,6 +422,17 @@ public class VistaPrincipal extends javax.swing.JFrame {
         dataTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         dataTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(dataTable);
+        dataTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if(!event.getValueIsAdjusting()){
+                    System.out.println("##### ACTIVANDO LISTENER");
+                    clearFields(editScrollVisor);
+                    clearFields(editImageVisor);
+                    getSospData(Controller.getController().getSospechosoByID(dataTable.getSelectedRow()));
+                    vistadata.removeAllMapEdit();
+                }
+            }
+        });
 
         searchField.setText("jTextField1");
 
@@ -452,7 +468,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Nombre");
 
-        nameEditField.setFocusable(false);
+        nombreEditField.setFocusable(false);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("DNI");
@@ -506,26 +522,16 @@ public class VistaPrincipal extends javax.swing.JFrame {
         numerosEditArea.setFocusable(false);
         jScrollPane6.setViewportView(numerosEditArea);
 
-        javax.swing.GroupLayout picVisorPanelLayout = new javax.swing.GroupLayout(picVisorPanel);
-        picVisorPanel.setLayout(picVisorPanelLayout);
-        picVisorPanelLayout.setHorizontalGroup(
-            picVisorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 628, Short.MAX_VALUE)
-        );
-        picVisorPanelLayout.setVerticalGroup(
-            picVisorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 198, Short.MAX_VALUE)
-        );
-
-        jScrollPane7.setViewportView(picVisorPanel);
+        editImageVisor.setLayout(new javax.swing.BoxLayout(editImageVisor, javax.swing.BoxLayout.LINE_AXIS));
+        editScrollVisor.setViewportView(editImageVisor);
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel17.setText("Datos extra");
 
-        numerosEditArea1.setColumns(20);
-        numerosEditArea1.setRows(5);
-        numerosEditArea1.setFocusable(false);
-        jScrollPane15.setViewportView(numerosEditArea1);
+        datosextraEditArea.setColumns(20);
+        datosextraEditArea.setRows(5);
+        datosextraEditArea.setFocusable(false);
+        jScrollPane15.setViewportView(datosextraEditArea);
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setText("Correos");
@@ -541,39 +547,44 @@ public class VistaPrincipal extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane15, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nacionalidadEditField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dniEditField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane7)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nameEditField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane6))
-                        .addComponent(jLabel17))
-                    .addComponent(jLabel18)
-                    .addComponent(jScrollPane16))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5)
+                    .addComponent(jScrollPane6)
+                    .addComponent(nombreEditField)
+                    .addComponent(editScrollVisor)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jLabel8)
+                                        .addComponent(jLabel17))
+                                    .addGap(21, 21, 21))
+                                .addComponent(jLabel18))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                            .addComponent(jScrollPane16)
+                            .addComponent(nacionalidadEditField, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                            .addComponent(dniEditField)
+                            .addComponent(jScrollPane4)
+                            .addComponent(jScrollPane15))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editScrollVisor, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nameEditField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nombreEditField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -611,6 +622,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jPanel2);
 
+        saveEdit.setText("Guardar edición");
+        saveEdit.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -632,20 +646,23 @@ public class VistaPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(267, 267, 267)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(267, Short.MAX_VALUE))))
+                        .addGap(106, 106, 106)
+                        .addComponent(saveEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                    .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(saveEdit))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -657,7 +674,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(300);
@@ -678,7 +695,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        // TODO add your handling code here:
+        Controller.getController().deleteSospechoso(dataTable.getSelectedRow());
+        updateTable();
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void nacionalidadEditFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nacionalidadEditFieldActionPerformed
@@ -703,18 +721,23 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        System.out.println(vistadata.getAllUrls());
+
         Boolean isValid = Controller.getController().addSospechoso(nombreAddField.getText(), dniAddField.getText(), nacionalidadAddField.getText(), antecedentesAddArea.getText(),
                 correosAddArea.getText(), direccionesAddArea.getText(), matriculasAddArea.getText(), numerosAddArea.getText(), datosExtraAddArea.getText(), vistadata.getAllUrls());
         if (!isValid) {
             JOptionPane.showMessageDialog(this, "Hubo un error añadiendo el registro.", "ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            this.clearAddDialog();
+            clearFields(addImagesVisor);
+            clearFields(addContainer);
+            vistadata.removeAllMap();
             addDialog.setVisible(false);
         }
+        updateTable();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void addImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addImageActionPerformed
-        addImageToVisor();
+        addImageVisor();
 
     }//GEN-LAST:event_addImageActionPerformed
 
@@ -723,7 +746,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int dialogResult = JOptionPane.showConfirmDialog(this, "¿Estás seguro? Los datos introducidos se desecharan", "ATENCIÓN", dialogButton);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            clearAddDialog();
+            clearFields(addImagesVisor);
+            clearFields(addContainer);
+            vistadata.removeAllMap();
             addDialog.setVisible(false);
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
@@ -732,7 +757,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-       
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -756,11 +781,14 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextArea correosEditArea;
     private javax.swing.JTable dataTable;
     private javax.swing.JTextArea datosExtraAddArea;
+    private javax.swing.JTextArea datosextraEditArea;
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextArea direccionesAddArea;
     private javax.swing.JTextArea direccionesEditArea;
     private javax.swing.JTextField dniAddField;
     private javax.swing.JTextField dniEditField;
+    private javax.swing.JPanel editImageVisor;
+    private javax.swing.JScrollPane editScrollVisor;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JFileChooser imageChooser;
@@ -799,50 +827,55 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea matriculasAddArea;
     private javax.swing.JTextArea matriculasEditArea;
     private javax.swing.JTextField nacionalidadAddField;
     private javax.swing.JTextField nacionalidadEditField;
-    private javax.swing.JTextField nameEditField;
     private javax.swing.JTextField nombreAddField;
+    private javax.swing.JTextField nombreEditField;
     private javax.swing.JTextArea numerosAddArea;
     private javax.swing.JTextArea numerosEditArea;
-    private javax.swing.JTextArea numerosEditArea1;
-    private javax.swing.JPanel picVisorPanel;
     private javax.swing.JButton saveButton;
+    private javax.swing.JButton saveEdit;
     private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables
 
-    private void clearAddDialog() {
-        for (Component componente : addImagesVisor.getComponents()) {
-            System.out.println("####### " + componente.getClass());
-            if (componente instanceof JLabel && componente.getName().startsWith("image")) {
-                System.out.println("####### " + componente.getName());
-                addImagesVisor.remove(componente);
+    private void clearFields(Container panel) {
+        for (Component componente : panel.getComponents()) {
+            System.out.println(componente.getClass());
+            if (componente instanceof JLabel) {
+                if (componente.getName() != null) {
+                    if (componente.getName().startsWith("image")) {
+                        panel.remove(componente);
+                    }
+
+                }
+
             }
 
-            if (componente instanceof Filler && !"NOTTHIS".equals(componente.getName())) {
-                System.out.println("####### REMOVED");
-                addImagesVisor.remove(componente);
+            if (componente instanceof Box.Filler) {
+                System.out.println("ENTRA");
+                if (componente.getName() == null) {
+                    
+                        panel.remove(componente);
+                    
+
+                }
+
             }
         }
 
-        updateContainer(addImagesVisor);
+        updateContainer(panel);
 
-        for (Component componente : addContainer.getComponents()) {
-            System.out.println("Entrando");
-            System.out.println(componente.getClass());
+        for (Component componente : panel.getComponents()) {
             if (componente instanceof JTextField) {
                 ((JTextField) componente).setText("");
-                System.out.println("Entrando 1");
             }
 
             if (componente instanceof JTextArea) {
                 ((JTextArea) componente).setText("");
-                System.out.println("Entrando 2");
             }
 
             if (componente instanceof JScrollPane) {
@@ -858,27 +891,20 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         }
 
-        vistadata.removeAllMap();
-
     }
 
-    private void addImageToVisor() throws HeadlessException {
+    private void addImageVisor() throws HeadlessException {
         JLabel nuevoLabel = null;
         boolean fixed = false;
         Icon icono = null;
 
-        int returnVal = imageChooser.showOpenDialog(this);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if (imageChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File archivo = imageChooser.getSelectedFile();
             if (archivo.canRead()) {
 
-                String imagepath = imageChooser.getSelectedFile().getAbsolutePath();
                 BufferedImage image = null;
-
                 try {
-                    image = ImageIO.read(new File(imagepath));
-                    vistadata.addJlabelUrl(nuevoLabel, imagepath);
+                    image = ImageIO.read(new File(imageChooser.getSelectedFile().getAbsolutePath()));
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(this, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
                 }
@@ -892,17 +918,18 @@ public class VistaPrincipal extends javax.swing.JFrame {
                 icono = new ImageIcon(resImage);
 
                 nuevoLabel = new JLabel("", icono, JLabel.CENTER);
+                vistadata.addJlabelUrl(nuevoLabel, imageChooser.getSelectedFile().getAbsolutePath());
                 String nombre = "image" + String.valueOf(addImagesVisor.getComponentCount() + contador);
                 contador++;
-                System.out.println(nombre);
                 nuevoLabel.setName(nombre);
                 nuevoLabel.setSize(addScrollVisor.getWidth() / 4, addScrollVisor.getHeight() / 2);
                 nuevoLabel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        System.out.println("WORKING");
-                        vistadata.removeJlabelUrl(jLabel1);
+                        Controller.getController().deleteSospechosoIMGByID(dataTable.getSelectedRow(), vistadata.getMapEdit((JLabel) e.getComponent()));
+                        vistadata.removeJlabelUrl((JLabel) e.getComponent());
                         addImagesVisor.remove(e.getComponent());
+
                         updateContainer(addImagesVisor);
                     }
 
@@ -933,7 +960,83 @@ public class VistaPrincipal extends javax.swing.JFrame {
         panel.repaint();
     }
 
-    private void updateTabla() {
+    private void updateTable() {
         dataTable.setModel(Controller.getController().getSospechosos());
     }
+
+    private void getSospData(SospechosoEntity sosp) {
+        chargeFields(sosp.getNombre(), sosp.getDni(), sosp.getNacionalidad(), sosp.getAntecedentesString(), sosp.getDireccionesString(),
+                sosp.getCorreosString(), sosp.getDatosextraString(), sosp.getMatriculasString(), sosp.getTelefonosString(), sosp.getFotosString());
+        chargeImages((int) sosp.getId());
+        
+    }
+
+    private void chargeImages(int id) {
+
+        Map<Integer, ArrayList> map = Controller.getController().getImagenesFromSosp(id);
+        ArrayList<BufferedImage> images = map.get(0);
+        ArrayList<String> imagedir = map.get(1);
+
+        if (images != null && imagedir != null && images.size() != 0 && imagedir.size() != 0) {
+            for (int i = 0; i < images.size(); i++) {
+                System.out.println("IMAGE " + i + " / " + images.size() + " || " + imagedir.size());
+                addImageToEditVisor(images.get(i), imagedir.get(i));
+            }
+        }
+
+    }
+
+    private void chargeFields(String name, String dni, String nacionalidad, String antecedentes, String direcciones, String correos, String datosextra, String matriculas, String numeros, String fotos) {
+        nombreEditField.setText(name);
+        dniEditField.setText(dni);
+        nacionalidadEditField.setText(nacionalidad);
+        antecedentesEditArea.setText(antecedentes);
+        direccionesEditArea.setText(direcciones);
+        numerosEditArea.setText(numeros);
+        correosEditArea.setText(correos);
+        matriculasEditArea.setText(matriculas);
+        datosextraEditArea.setText(datosextra);
+
+    }
+
+    private void addImageToEditVisor(BufferedImage img, String filepath) {
+
+        JLabel nuevoLabel = null;
+        boolean fixed = false;
+        Icon icono = null;
+
+        Dimension imageDimension = Utils.getScaledDimension(new Dimension(img.getWidth(), img.getHeight()),
+                new Dimension(editScrollVisor.getWidth() / 4 - 10, editScrollVisor.getHeight() / 2 - 10));
+
+        Image resImage = img.getScaledInstance((int) imageDimension.getWidth(),
+                (int) imageDimension.getHeight(), Image.SCALE_SMOOTH);
+
+        icono = new ImageIcon(resImage);
+
+        nuevoLabel = new JLabel("", icono, JLabel.CENTER);
+        vistadata.addJlabelUrlEdit(nuevoLabel, filepath);
+        String nombre = "image" + String.valueOf(editImageVisor.getComponentCount() + contador);
+        contador++;
+        nuevoLabel.setName(nombre);
+        nuevoLabel.setSize(editScrollVisor.getWidth() / 4, editScrollVisor.getHeight() / 2);
+        nuevoLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Utils.deleteImage(vistadata.getMapEdit((JLabel) e.getComponent()));
+                vistadata.removeJlabelUrlEdit((JLabel) e.getComponent());
+                editImageVisor.remove(e.getComponent());
+                updateContainer(editImageVisor);
+            }
+
+        });
+        editImageVisor.add(Box.createRigidArea(new Dimension(10, 0)));
+        editImageVisor.add(nuevoLabel);
+
+        nuevoLabel.setIcon(new ImageIcon(resImage));
+        nuevoLabel.setVisible(true);
+
+        updateContainer(editImageVisor);
+
+    }
+
 }

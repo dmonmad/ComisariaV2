@@ -17,10 +17,15 @@ import com.nightm4re.comisariav2.modelo.SospechosoEntity;
 import com.nightm4re.comisariav2.utils.Utils;
 import com.nightm4re.comisariav2.vista.VistaPrincipal;
 import com.nightm4re.comisariav2.vista.VistaUtils;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -88,11 +93,72 @@ public class Controller {
     }
     
     public DefaultTableModel getSospechosos(){
-        sosps = new ArrayList<SospechosoEntity>(new SospechosoEntityJpaController(emf).findSospechosoEntityEntities());
-        
-        return VistaUtils.SospechososToTableModel(sosps);
+        sosps = new ArrayList<SospechosoEntity>(new SospechosoEntityJpaController(emf).findAllSospechosoEntityEntities());
+        for(SospechosoEntity sos : sosps){
+            System.out.println(sos);
+        }
+        return Utils.SospechososToTableModel(sosps);
     }
     
+    public Map<Integer, ArrayList> getImagenesFromSosp(int id){
+        
+        ArrayList<BufferedImage> images = new ArrayList<>();
+        ArrayList<String> imagedir = new ArrayList<>();
+        Map<Integer, ArrayList> map = new HashMap<Integer, ArrayList>();
+        map.put(0, images);
+        map.put(1, imagedir);
+        
+        for(SospechosoEntity se : sosps){
+            if(se.getId() == id){
+                for(FotoEntity foto : se.getFotos()){
+                    imagedir.add(foto.getImagen());
+                    System.out.println(foto.getImagen());
+                }
+                System.out.println(imagedir);
+                
+                for(String s : imagedir){
+                    System.out.println(s);
+                    images.add(Utils.DecodeFileToImage(new File(s)));
+                    
+                }
+                System.out.println(imagedir);
+                
+            }
+        }
+            
+        return map;
+    }
     
+    public SospechosoEntity getSospechosoByID(int row){
+        System.out.println("SELECTING "+row+" / "+sosps.size());
+        System.out.println("WOOOORK"+sosps.get(row).toString());
+        return sosps.get(row);
+    }
+
+    public void deleteSospechoso(int id) {
+         try{
+            System.out.println("ENTRAAAAAA");
+            SospechosoEntityJpaController sejc = new SospechosoEntityJpaController(emf);
+            sejc.destroy(sosps.get(id).getId());
+                    
+        }catch(Exception ex){
+            Utils.LogToFile(ex);
+        }
+    }
+    
+    public boolean deleteSospechosoIMGByID(int row, String img){
+        boolean deleted = false;
+        System.out.println("SELECTING "+row+" / "+sosps.size());
+        System.out.println("WOOOORK"+sosps.get(row).getNombre());
+        if(sosps.get(row).deleteImage(img)){
+            deleted = true;
+        }
+        
+        return deleted;
+    }
+
+    public void deleteSospechosoIMGByID(int selectedRow, BufferedImage image) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

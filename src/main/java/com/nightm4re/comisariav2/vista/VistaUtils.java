@@ -15,25 +15,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VistaUtils {
 
-    public static DefaultTableModel SospechososToTableModel(ArrayList<SospechosoEntity> sospechosos) {
-
-        String[] col = {"Nombre", "DNI", "Nacionalidad"};
-        DefaultTableModel tb = new DefaultTableModel(col, 0) {
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                //all cells false
-                return false;
-            }
-        };
-
-        for (SospechosoEntity s : sospechosos) {
-            Object[] x = {s.getNombre(), s.getDni(), s.getNacionalidad()};
-
-            tb.addRow(x);
-        }
-
-        return tb;
-    }
+    
 
 }

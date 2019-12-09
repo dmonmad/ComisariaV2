@@ -65,9 +65,9 @@ public class SospechosoEntityJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            
+
             em.persist(sospechosoEntity);
-            
+
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -338,6 +338,10 @@ public class SospechosoEntityJpaController implements Serializable {
         }
     }
 
+    public List<SospechosoEntity> findAllSospechosoEntityEntities() {
+        return findAllSospechosoEntity();
+    }
+
     public List<SospechosoEntity> findSospechosoEntityEntities() {
         return findSospechosoEntityEntities(true, -1, -1);
     }
@@ -362,6 +366,22 @@ public class SospechosoEntityJpaController implements Serializable {
         }
     }
 
+    private List<SospechosoEntity> findAllSospechosoEntity() {
+        EntityManager em = getEntityManager();
+
+        List<SospechosoEntity> salida;
+        try {
+            salida = em.createQuery("FROM SospechosoEntity", SospechosoEntity.class).getResultList();
+            for(SospechosoEntity e : salida){
+                System.out.println(e);
+            }
+        } finally {
+            em.close();
+        }
+        return salida;
+
+    }
+
     public SospechosoEntity findSospechosoEntity(long id) {
         EntityManager em = getEntityManager();
         try {
@@ -383,5 +403,5 @@ public class SospechosoEntityJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

@@ -15,6 +15,7 @@ import com.nightm4re.comisariav2.modelo.NumeroTelefonoEntity;
 import com.nightm4re.comisariav2.modelo.SospechosoEntity;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.TrayIcon;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -130,8 +132,9 @@ public class Utils {
                 
                 File archivo = new File(datext[i]);
                 if (archivo.canRead()) {
-
-                    EncodingUtils.encode(archivo, generateRandomFile());
+                    File st = generateRandomFile();
+                    EncodingUtils.encode(archivo, st);
+                    sb.append(st.getPath()+"\n");
 
                 }else{
                     JOptionPane.showMessageDialog(null, "No se puede leer el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
@@ -186,6 +189,27 @@ public class Utils {
         }
 
     }
+    
+    public static DefaultTableModel SospechososToTableModel(ArrayList<SospechosoEntity> sospechosos) {
+
+        String[] col = {"Nombre", "DNI", "Nacionalidad"};
+        DefaultTableModel tb = new DefaultTableModel(col, 0) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+
+        for (SospechosoEntity s : sospechosos) {
+            Object[] x = {s.getNombre(), s.getDni(), s.getNacionalidad()};
+
+            tb.addRow(x);
+        }
+
+        return tb;
+    }
 
     public static void EncodeImageToFile(String file) {
 
@@ -205,6 +229,28 @@ public class Utils {
         }
 
     }
+    
+    public static BufferedImage DecodeFileToImage(File file){
+        BufferedImage bi = null;
+        
+        try {
+
+            
+            if (file.canRead()) {
+
+                bi = EncodingUtils.decode(file);
+
+
+            }else{
+                JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (HeadlessException e) {
+            Utils.LogToFile(e);
+        }
+        return bi;
+        
+    }
 
     public static File generateRandomFile() {
         int nombre = 0;
@@ -223,6 +269,15 @@ public class Utils {
             }
         }
         return enc;
+    }
+
+    public static void deleteImage(String codedpath) {
+        System.out.println(codedpath);
+        File e = new File(codedpath);
+        
+        if(!e.delete()){
+            JOptionPane.showMessageDialog(null, "No se ha podido eliminar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }

@@ -49,7 +49,7 @@ public class AntecedentesEntity implements Serializable {
         return id;
     }
 
-    public String getTitulo() {
+    public String getDelito() {
         return delito;
     }
 
