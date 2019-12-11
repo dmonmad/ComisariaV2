@@ -81,9 +81,22 @@ public class SospechosoEntityJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            System.out.println(sospechosoEntity);
+            System.out.println(sospechosoEntity);
+            System.out.println(sospechosoEntity);
+            System.out.println(sospechosoEntity);
+            System.out.println(sospechosoEntity);
+            System.out.println(sospechosoEntity);
+            System.out.println(sospechosoEntity);
+            etraertf earfaerfearea
+            
             SospechosoEntity persistentSospechosoEntity = em.find(SospechosoEntity.class, sospechosoEntity.getId());
+            System.out.println("1. #####"+sospechosoEntity.getId()+"AFTER FIND");
+            System.out.println("2. #####"+persistentSospechosoEntity);
             List<AntecedentesEntity> antecedentesOld = persistentSospechosoEntity.getAntecedentes();
             List<AntecedentesEntity> antecedentesNew = sospechosoEntity.getAntecedentes();
+            System.out.println("3. #####"+antecedentesNew);
+            System.out.println("4. #####"+antecedentesNew.get(0).getId());
             List<CorreoEntity> correosOld = persistentSospechosoEntity.getCorreos();
             List<CorreoEntity> correosNew = sospechosoEntity.getCorreos();
             List<NumeroTelefonoEntity> telefonosOld = persistentSospechosoEntity.getTelefonos();
@@ -96,9 +109,12 @@ public class SospechosoEntityJpaController implements Serializable {
             List<DatosExtraEntity> datosextraNew = sospechosoEntity.getDatosextra();
             List<FotoEntity> fotosOld = persistentSospechosoEntity.getFotos();
             List<FotoEntity> fotosNew = sospechosoEntity.getFotos();
+            System.out.println("LLEGA 1");
             List<AntecedentesEntity> attachedAntecedentesNew = new ArrayList<AntecedentesEntity>();
             for (AntecedentesEntity antecedentesNewAntecedentesEntityToAttach : antecedentesNew) {
+                System.out.println("LLEGA 1.1 --- "+antecedentesNewAntecedentesEntityToAttach.getId());
                 antecedentesNewAntecedentesEntityToAttach = em.getReference(antecedentesNewAntecedentesEntityToAttach.getClass(), antecedentesNewAntecedentesEntityToAttach.getId());
+                System.out.println("LLEGA 1.2");
                 attachedAntecedentesNew.add(antecedentesNewAntecedentesEntityToAttach);
             }
             antecedentesNew = attachedAntecedentesNew;
@@ -129,6 +145,7 @@ public class SospechosoEntityJpaController implements Serializable {
                 matriculasNewMatriculaEntityToAttach = em.getReference(matriculasNewMatriculaEntityToAttach.getClass(), matriculasNewMatriculaEntityToAttach.getId());
                 attachedMatriculasNew.add(matriculasNewMatriculaEntityToAttach);
             }
+            System.out.println("LLEGA 2");
             matriculasNew = attachedMatriculasNew;
             sospechosoEntity.setMatriculas(matriculasNew);
             List<DatosExtraEntity> attachedDatosextraNew = new ArrayList<DatosExtraEntity>();
@@ -163,6 +180,7 @@ public class SospechosoEntityJpaController implements Serializable {
                     }
                 }
             }
+            System.out.println("LLEGA 3");
             for (CorreoEntity correosOldCorreoEntity : correosOld) {
                 if (!correosNew.contains(correosOldCorreoEntity)) {
                     correosOldCorreoEntity.setSospechoso(null);
@@ -197,6 +215,7 @@ public class SospechosoEntityJpaController implements Serializable {
                     }
                 }
             }
+            System.out.println("LLEGA 4");
             for (DireccionEntity direccionesOldDireccionEntity : direccionesOld) {
                 if (!direccionesNew.contains(direccionesOldDireccionEntity)) {
                     direccionesOldDireccionEntity.setSospechoso(null);
@@ -237,6 +256,8 @@ public class SospechosoEntityJpaController implements Serializable {
                     datosextraOldDatosExtraEntity = em.merge(datosextraOldDatosExtraEntity);
                 }
             }
+            
+            System.out.println("LLEGA 5");
             for (DatosExtraEntity datosextraNewDatosExtraEntity : datosextraNew) {
                 if (!datosextraOld.contains(datosextraNewDatosExtraEntity)) {
                     SospechosoEntity oldSospechosoOfDatosextraNewDatosExtraEntity = datosextraNewDatosExtraEntity.getSospechoso();
@@ -265,7 +286,9 @@ public class SospechosoEntityJpaController implements Serializable {
                     }
                 }
             }
+            System.out.println("LLEGA 6");
             em.getTransaction().commit();
+            System.out.println("########### "+sospechosoEntity.getId());
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {

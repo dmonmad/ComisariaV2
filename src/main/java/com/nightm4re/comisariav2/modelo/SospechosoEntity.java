@@ -239,16 +239,16 @@ public class SospechosoEntity implements Serializable {
         return sb.toString();
     }
     
-    public boolean deleteImage(String image){
-        boolean deleted = false;
-        for(FotoEntity fe : fotos){
-            if(fe.getImagen() == image){
-                fotos.remove(fe);
-                deleted = true;
-            }
-        }
-        return deleted;
-    }
+//    public boolean deleteImage(String image){
+//        boolean deleted = false;
+//        for(FotoEntity fe : fotos){
+//            if(fe.getImagen() == image){
+//                fotos.remove(fe);
+//                deleted = true;
+//            }
+//        }
+//        return deleted;
+//    }
 
     
     

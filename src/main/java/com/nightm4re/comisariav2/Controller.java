@@ -16,7 +16,6 @@ import com.nightm4re.comisariav2.modelo.NumeroTelefonoEntity;
 import com.nightm4re.comisariav2.modelo.SospechosoEntity;
 import com.nightm4re.comisariav2.utils.Utils;
 import com.nightm4re.comisariav2.vista.VistaPrincipal;
-import com.nightm4re.comisariav2.vista.VistaUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ public class Controller {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("comisariav2");
     private static Controller controller = null;    
     ArrayList<SospechosoEntity> sosps = null;
+    
     
     public void Start(){
 
@@ -140,25 +140,45 @@ public class Controller {
             System.out.println("ENTRAAAAAA");
             SospechosoEntityJpaController sejc = new SospechosoEntityJpaController(emf);
             sejc.destroy(sosps.get(id).getId());
+            Utils.deleteImages(sosps.get(id).getFotosString());
                     
         }catch(Exception ex){
             Utils.LogToFile(ex);
         }
     }
     
-    public boolean deleteSospechosoIMGByID(int row, String img){
-        boolean deleted = false;
-        System.out.println("SELECTING "+row+" / "+sosps.size());
-        System.out.println("WOOOORK"+sosps.get(row).getNombre());
-        if(sosps.get(row).deleteImage(img)){
-            deleted = true;
+//    public boolean deleteSospechosoIMGByID(int row, String img){
+//        boolean deleted = false;
+//        System.out.println("SELECTING "+row+" / "+sosps.size());
+//        System.out.println("WOOOORK"+sosps.get(row).getNombre());
+//        if(sosps.get(row).deleteImage(img)){
+//            deleted = true;
+//        }
+//        
+//        return deleted;
+//    }
+
+    public void editSospechoso(int id, String nombre, String dni, String nacionalidad, String antecedentes, String correos, String direcciones , String matriculas, String numeros, String datosextra, String allUrlsEdit, String allNewUrlsEdit) {
+        
+        SospechosoEntity sosp = sosps.get(id);
+        sosp.setNombre(nombre);
+        sosp.setDni(dni);
+        sosp.setNacionalidad(nacionalidad);
+        sosp.setAntecedentes(Utils.AntecedentesStringToList(antecedentes, sosp));
+        sosp.setCorreos(Utils.CorreosStringToList(correos, sosp));
+        sosp.setDirecciones(Utils.DireccionesStringToList(direcciones, sosp));
+        sosp.setMatriculas(Utils.MatriculasStringToList(matriculas, sosp));
+        sosp.setTelefonos(Utils.NumerosStringToList(numeros, sosp));
+        System.out.println("------------------ LLEGA AQUÍ --------------------------");
+        sosp.setFotos(Utils.fixedFotosStringToList(allUrlsEdit, allNewUrlsEdit, sosp));
+        System.out.println("------------------ AHORA AQUÍ --------------------------");
+        try{
+            new SospechosoEntityJpaController(emf).edit(sosp);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            Utils.LogToFile(e);
         }
         
-        return deleted;
-    }
-
-    public void deleteSospechosoIMGByID(int selectedRow, BufferedImage image) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

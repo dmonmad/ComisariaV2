@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Time;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -122,6 +124,18 @@ public class Utils {
         return fotoslist;
     }
 
+    public static ArrayList<FotoEntity> FotosEditStringToList(String fotos, String fotosextra, SospechosoEntity sospechoso) {
+        ArrayList<FotoEntity> fotoslist = FotosStringToList(fotos, sospechoso);
+        String[] datext = fotosextra.split("\\n");
+        for (int i = 0; i < datext.length; i++) {
+            FotoEntity dato = new FotoEntity();
+            dato.setImagen(datext[i]);
+            dato.setSospechoso(sospechoso);
+            fotoslist.add(dato);
+        }
+        return fotoslist;
+    }
+
     public static String EncodeImagesToFiles(String fotos) {
         StringBuilder sb = new StringBuilder("");
 
@@ -129,14 +143,14 @@ public class Utils {
 
         for (int i = 0; i < datext.length; i++) {
             try {
-                
+
                 File archivo = new File(datext[i]);
                 if (archivo.canRead()) {
                     File st = generateRandomFile();
                     EncodingUtils.encode(archivo, st);
-                    sb.append(st.getPath()+"\n");
+                    sb.append(st.getPath() + "\n");
 
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "No se puede leer el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -180,16 +194,16 @@ public class Utils {
     public static void LogToFile(Exception e) {
 
         try {
-            FileWriter fw = new FileWriter("log.txt", true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw, true);
-            e.printStackTrace(out);
+            FileWriter fileWriter = new FileWriter("/log.txt", true); //Set true for append mode
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.println("[ " + Time.from(Instant.now()) + " ] -> " + e.getStackTrace().toString());  //New line
+            printWriter.close();
         } catch (Exception ie) {
             System.out.println("Could not write Exception to file: " + ie);
         }
 
     }
-    
+
     public static DefaultTableModel SospechososToTableModel(ArrayList<SospechosoEntity> sospechosos) {
 
         String[] col = {"Nombre", "DNI", "Nacionalidad"};
@@ -211,14 +225,15 @@ public class Utils {
         return tb;
     }
 
-    public static void EncodeImageToFile(String file) {
-
+    public static File EncodeImageToFile(String file) {
+        File archivodestino = null;
         try {
 
             File archivo = new File(file);
+            archivodestino = generateRandomFile();
             if (archivo.canRead()) {
 
-                EncodingUtils.encode(new File(file), generateRandomFile());
+                EncodingUtils.encode(archivo, archivodestino);
 
                 JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
 
@@ -228,28 +243,29 @@ public class Utils {
 
         }
 
+        return archivodestino;
+
     }
-    
-    public static BufferedImage DecodeFileToImage(File file){
+
+    public static BufferedImage DecodeFileToImage(File file) {
         BufferedImage bi = null;
-        
+
         try {
 
-            
             if (file.canRead()) {
 
                 bi = EncodingUtils.decode(file);
 
-
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (HeadlessException e) {
+            System.out.println(e);
             Utils.LogToFile(e);
         }
         return bi;
-        
+
     }
 
     public static File generateRandomFile() {
@@ -265,7 +281,8 @@ public class Utils {
                     isvalid = true;
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println(e);
+                Utils.LogToFile(e);
             }
         }
         return enc;
@@ -274,10 +291,64 @@ public class Utils {
     public static void deleteImage(String codedpath) {
         System.out.println(codedpath);
         File e = new File(codedpath);
-        
-        if(!e.delete()){
+
+        if (!e.exists()) {
+            e.deleteOnExit();
+            System.out.println("ARCHIVO EXISTE: " + e.exists() + " SE PUEDE LEER " + e.canRead());
             JOptionPane.showMessageDialog(null, "No se ha podido eliminar", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public static void deleteImages(String images) {
+
+        String[] datext = images.split("\\n");
+
+        for (int i = 0; i < datext.length; i++) {
+            try {
+                File e = new File(datext[i]);
+                if (e.exists()) {
+                    e.deleteOnExit();
+
+                } else {
+                    System.out.println("No existe");
+                }
+
+            } catch (HeadlessException ex) {
+                System.out.println(ex);
+                Utils.LogToFile(ex);
+            }
+        }
+    }
+
+    public static ArrayList<FotoEntity> fixedFotosStringToList(String allUrlsEdit, String allNewUrlsEdit, SospechosoEntity sosp) {
+        
+        ArrayList<FotoEntity> tobefixed = null;
+        if (allUrlsEdit.trim().isEmpty() || allUrlsEdit.trim() == "") {
+            tobefixed = FotosStringToList(allUrlsEdit, sosp);
+        }
+        
+        ArrayList<FotoEntity> tobeadded = null;
+        if (allNewUrlsEdit.trim().isEmpty() || allNewUrlsEdit.trim() == "") {
+            tobeadded = Utils.FotosStringToList(Utils.EncodeImagesToFiles(allNewUrlsEdit), sosp);
+        }
+
+        if (tobefixed != null) {
+            for (FotoEntity feold : sosp.getFotos()) {
+                if (!tobefixed.contains(feold)) {
+                    System.out.println("------###### LLEGA ANTES BORRAR");
+                    Utils.deleteImage(feold.getImagen());
+                    System.out.println("------###### LLEGA DESPUES BORRAR");
+                }
+            }
+        }
+
+        if (tobeadded != null) {
+            for (FotoEntity foto : tobeadded) {
+                tobefixed.add(foto);
+            }
+        }
+
+        return tobefixed;
     }
 
 }
