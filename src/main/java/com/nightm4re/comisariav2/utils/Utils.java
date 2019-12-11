@@ -145,7 +145,8 @@ public class Utils {
             try {
 
                 File archivo = new File(datext[i]);
-                if (archivo.canRead()) {
+                if(archivo.exists()){
+                    if (archivo.canRead()) {
                     File st = generateRandomFile();
                     EncodingUtils.encode(archivo, st);
                     sb.append(st.getPath() + "\n");
@@ -153,6 +154,8 @@ public class Utils {
                 } else {
                     JOptionPane.showMessageDialog(null, "No se puede leer el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
                 }
+                }
+                
 
             } catch (Exception e) {
                 LogToFile(e);
@@ -227,20 +230,25 @@ public class Utils {
 
     public static File EncodeImageToFile(String file) {
         File archivodestino = null;
-        try {
+        if (!file.trim().isEmpty() && !file.trim().equals("")) {
 
-            File archivo = new File(file);
-            archivodestino = generateRandomFile();
-            if (archivo.canRead()) {
+            try {
 
-                EncodingUtils.encode(archivo, archivodestino);
+                File archivo = new File(file);
+                if (archivo.exists()) {
+                    archivodestino = generateRandomFile();
+                    if (archivo.canRead()) {
 
-                JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+                        EncodingUtils.encode(archivo, archivodestino);
 
+                        JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+
+                    }
+                }
+
+            } catch (HeadlessException e) {
+                Utils.LogToFile(e);
             }
-
-        } catch (HeadlessException e) {
-
         }
 
         return archivodestino;
@@ -249,21 +257,26 @@ public class Utils {
 
     public static BufferedImage DecodeFileToImage(File file) {
         BufferedImage bi = null;
+        if (file != null) {
+            if (file.exists()) {
 
-        try {
+                try {
 
-            if (file.canRead()) {
+                    if (file.canRead()) {
 
-                bi = EncodingUtils.decode(file);
+                        bi = EncodingUtils.decode(file);
 
-            } else {
-                JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Hubo un error leyendo el archivo.", "ERROR DE LECTURA", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } catch (HeadlessException e) {
+                    System.out.println(e);
+                    Utils.LogToFile(e);
+                }
             }
-
-        } catch (HeadlessException e) {
-            System.out.println(e);
-            Utils.LogToFile(e);
         }
+
         return bi;
 
     }
@@ -292,10 +305,9 @@ public class Utils {
         System.out.println(codedpath);
         File e = new File(codedpath);
 
-        if (!e.exists()) {
+        if (e.exists()) {
             e.deleteOnExit();
             System.out.println("ARCHIVO EXISTE: " + e.exists() + " SE PUEDE LEER " + e.canRead());
-            JOptionPane.showMessageDialog(null, "No se ha podido eliminar", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -321,12 +333,12 @@ public class Utils {
     }
 
     public static ArrayList<FotoEntity> fixedFotosStringToList(String allUrlsEdit, String allNewUrlsEdit, SospechosoEntity sosp) {
-        
+
         ArrayList<FotoEntity> tobefixed = null;
         if (allUrlsEdit.trim().isEmpty() || allUrlsEdit.trim() == "") {
             tobefixed = FotosStringToList(allUrlsEdit, sosp);
         }
-        
+
         ArrayList<FotoEntity> tobeadded = null;
         if (allNewUrlsEdit.trim().isEmpty() || allNewUrlsEdit.trim() == "") {
             tobeadded = Utils.FotosStringToList(Utils.EncodeImagesToFiles(allNewUrlsEdit), sosp);

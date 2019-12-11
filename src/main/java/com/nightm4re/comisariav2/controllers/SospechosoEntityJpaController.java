@@ -88,13 +88,15 @@ public class SospechosoEntityJpaController implements Serializable {
             System.out.println(sospechosoEntity);
             System.out.println(sospechosoEntity);
             System.out.println(sospechosoEntity);
-            etraertf earfaerfearea
+            
             
             SospechosoEntity persistentSospechosoEntity = em.find(SospechosoEntity.class, sospechosoEntity.getId());
             System.out.println("1. #####"+sospechosoEntity.getId()+"AFTER FIND");
             System.out.println("2. #####"+persistentSospechosoEntity);
+            System.out.println("2.5 ####"+sospechosoEntity);
             List<AntecedentesEntity> antecedentesOld = persistentSospechosoEntity.getAntecedentes();
             List<AntecedentesEntity> antecedentesNew = sospechosoEntity.getAntecedentes();
+            
             System.out.println("3. #####"+antecedentesNew);
             System.out.println("4. #####"+antecedentesNew.get(0).getId());
             List<CorreoEntity> correosOld = persistentSospechosoEntity.getCorreos();
@@ -366,6 +368,7 @@ public class SospechosoEntityJpaController implements Serializable {
     }
 
     public List<SospechosoEntity> findSospechosoEntityEntities() {
+        System.out.println("----3");
         return findSospechosoEntityEntities(true, -1, -1);
     }
 
@@ -375,15 +378,25 @@ public class SospechosoEntityJpaController implements Serializable {
 
     private List<SospechosoEntity> findSospechosoEntityEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
+        System.out.println("----4");
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(SospechosoEntity.class));
+            System.out.println("----5");
             Query q = em.createQuery(cq);
+            System.out.println("----6");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
+                
             }
-            return q.getResultList();
+            List<SospechosoEntity> salida = q.getResultList();
+            for(SospechosoEntity e : salida){
+                System.out.println(e);
+            }
+            System.out.println("----7");
+            return salida;
+            
         } finally {
             em.close();
         }

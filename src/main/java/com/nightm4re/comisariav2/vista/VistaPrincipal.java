@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Toolkit;
 
 /**
  *
@@ -159,6 +160,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
 
         addDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addDialog.setModal(true);
         addDialog.setResizable(false);
         addDialog.setSize(new java.awt.Dimension(504, 712));
 
@@ -201,7 +203,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jLabel9.setText("Nombre");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel10.setText("DNI");
+        jLabel10.setText("Identificación");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("Nacionalidad");
@@ -285,9 +287,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
                             .addComponent(nombreAddField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nacionalidadAddField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(addContainerLayout.createSequentialGroup()
-                        .addGap(234, 234, 234)
-                        .addComponent(jLabel10))
-                    .addGroup(addContainerLayout.createSequentialGroup()
                         .addGap(207, 207, 207)
                         .addComponent(jLabel11))
                     .addGroup(addContainerLayout.createSequentialGroup()
@@ -326,6 +325,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addContainerLayout.createSequentialGroup()
+                .addComponent(jLabel10)
+                .addGap(201, 201, 201))
         );
         addContainerLayout.setVerticalGroup(
             addContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,6 +396,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         imageChooser.setFileFilter(new FileNameExtensionFilter("Imagenes JPG o PNG", "jpg", "png", "jpeg"));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(VistaPrincipal.class.getResource("/icons/icon.png")));
         setResizable(false);
         setSize(new java.awt.Dimension(1400, 1080));
 
@@ -477,7 +480,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         nombreEditField.setEnabled(false);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setText("DNI");
+        jLabel3.setText("Identificación");
 
         dniEditField.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         dniEditField.setEnabled(false);
@@ -779,10 +782,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private void saveEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEditActionPerformed
         Controller.getController().editSospechoso(dataTable.getSelectedRow(), nombreAddField.getText(), dniAddField.getText(), nacionalidadAddField.getText(), antecedentesAddArea.getText(),
                 correosAddArea.getText(), direccionesAddArea.getText(), matriculasAddArea.getText(), numerosAddArea.getText(), datosExtraAddArea.getText(), vistadata.getAllUrlsEdit(), vistadata.getAllNewUrlsEdit());
+        updateTable();
+        clearFields(editScrollVisor);
+        clearFields(editImageVisor);
     }//GEN-LAST:event_saveEditActionPerformed
 
     private void addImageEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addImageEditActionPerformed
-        addImageToEditVisor(null, null);
+        addImageToEditVisor(null, null, true);
     }//GEN-LAST:event_addImageEditActionPerformed
 
     /**
@@ -1011,10 +1017,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
             ArrayList<BufferedImage> images = map.get(0);
             ArrayList<String> imagedir = map.get(1);
 
-            if (images != null && imagedir != null && images.size() != 0 && imagedir.size() != 0) {
+            if (images.size() != 0 && images != null && imagedir.size() != 0 && imagedir != null && images.size() != 0 && imagedir.size() != 0) {
                 for (int i = 0; i < images.size(); i++) {
                     System.out.println("IMAGE " + i + " / " + images.size() + " || " + imagedir.size());
-                    addImageToEditVisor(images.get(i), imagedir.get(i));
+                    addImageToEditVisor(images.get(i), imagedir.get(i), false);
                 }
             }
         } catch (Exception e) {
@@ -1038,7 +1044,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     }
 
-    private void addImageToEditVisor(BufferedImage img, String filepath) {
+    private void addImageToEditVisor(BufferedImage img, String filepath, boolean fromButton) {
 
         JLabel nuevoLabel = null;
         Icon icono = null;
@@ -1048,7 +1054,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
             isNewImage = true;
         }
 
-        if (isNewImage) {
+        if (isNewImage && fromButton) {
             if (imageChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File archivo = imageChooser.getSelectedFile();
                 if (archivo.exists() && archivo.isFile() && archivo.canRead()) {

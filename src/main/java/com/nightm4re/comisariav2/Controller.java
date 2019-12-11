@@ -93,7 +93,9 @@ public class Controller {
     }
     
     public DefaultTableModel getSospechosos(){
-        sosps = new ArrayList<SospechosoEntity>(new SospechosoEntityJpaController(emf).findAllSospechosoEntityEntities());
+        System.out.println("----1");
+        sosps = new ArrayList<SospechosoEntity>(new SospechosoEntityJpaController(emf).findSospechosoEntityEntities());
+        System.out.println("----2");
         for(SospechosoEntity sos : sosps){
             System.out.println(sos);
         }
@@ -161,6 +163,7 @@ public class Controller {
     public void editSospechoso(int id, String nombre, String dni, String nacionalidad, String antecedentes, String correos, String direcciones , String matriculas, String numeros, String datosextra, String allUrlsEdit, String allNewUrlsEdit) {
         
         SospechosoEntity sosp = sosps.get(id);
+        System.out.println(sosp);
         sosp.setNombre(nombre);
         sosp.setDni(dni);
         sosp.setNacionalidad(nacionalidad);
